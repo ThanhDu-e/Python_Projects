@@ -77,7 +77,13 @@ def main():
     # stores all the Target objects and draw them on the screen
     targets = []
     clock = pygame.time.Clock() 
-    # sets the TARGET_EVENT to happen every TARGET_INTERVAL
+
+    target_pressed = 0 # tracks how many targets clicked
+    clicks = 0 # tracks number of clicks
+    misses = 0 # tracks number of targets missed
+    start_time = time.time() # timer
+
+    # for every TARGET_INTERVAL that elapse, TARGET_EVENT will occur
     pygame.time.set_timer(TARGET_EVENT, TARGET_INTERVAL)
 
 
@@ -90,11 +96,13 @@ def main():
                 run = False
                 break
 
-            # Create new Target object whenever event is triggered and add it to list
+            # Create new Target object whenever TARGET_EVENT is triggered and add it to list
             if event.type == TARGET_EVENT:
+                # generate random positional values
                 x = random.randint(TARGET_PADDING, WIDTH - TARGET_PADDING)
                 y = random.randint(TARGET_PADDING, HEIGHT - TARGET_PADDING)
-
+                
+                # create new Target object 
                 target = Target(x, y)
                 targets.append(target)
         
@@ -103,6 +111,8 @@ def main():
 
             if target.size <= 0:
                 targets.remove(target) # if a target size is 0 or below, it is removed.
+                # if target hits 0, it is considered a miss
+                misses += 1
 
 
         draw(WIN, targets)
